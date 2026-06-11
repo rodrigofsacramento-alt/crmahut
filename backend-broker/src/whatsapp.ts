@@ -128,10 +128,12 @@ export async function startWhatsAppSession(tenantId: string, sessionName: string
         }
 
         const payload = {
-          tenantId: tenantId,
-          phone: phone,
-          message: textMessage,
-          timestamp: new Date().toISOString()
+          sender: phone,
+          wook: 'RECEIVE_MESSAGE',
+          type: 'text',
+          content: textMessage,
+          name: msg.pushName || 'Contato ' + phone,
+          datetime: new Date().toISOString()
         };
 
         const response = await fetch(webhookUrl, {
@@ -154,3 +156,29 @@ export async function startWhatsAppSession(tenantId: string, sessionName: string
     }
   });
 }
+
+// Função para enviar mensagem de texto para o WhatsApp do cliente
+export async function sendOutboundMessage(tenantId: string, phone: string, content: string) {
+  // Como só temos uma sessão por enquanto (default), podemos buscar pela primeira chave
+  // Mas o certo em multi-tenant é buscar a chave do tenant correto
+  const sessionId = `${tenantId}-default`;
+  const sock = sessions.get(sessionId);
+
+  if (!sock) {
+    console.error(`[Baileys] Erro: Sessão não encontrada ou desconectada para ${sessionId}`);
+    return false;
+  }
+
+  try {
+    // Adiciona o sufixo @s.whatsapp.net necessário para o Baileys
+    const jid = `${phone}@s.whatsapp.net`;
+    
+    await sock.sendMessage(jid, { text: content });
+    console.log(`[Baileys] Mensagem enviada com sucesso para ${phone}`);
+    return true;
+  } catch (error) {
+    console.error(`[Baileys] Falha ao enviar mensagem para ${phone}:`, error);
+    return false;
+  }
+}
+
