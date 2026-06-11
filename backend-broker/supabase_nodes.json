@@ -1,0 +1,605 @@
+[
+  {
+    "name": "Busca Telefone",
+    "table": "leads_sync_2_0",
+    "params": {
+      "operation": "get",
+      "tableId": "leads_sync_2_0",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "name",
+            "keyValue": "={{ $('Webhook1').item.json.body.name }}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Adiciona CHAT supabase",
+    "table": "chats",
+    "params": {
+      "tableId": "chats",
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "phone",
+            "fieldValue": "={{ $('Dados1').item.json.Telefone }}"
+          },
+          {
+            "fieldId": "updated_at",
+            "fieldValue": "={{ $now}}"
+          },
+          {
+            "fieldId": "created_at",
+            "fieldValue": "={{ $now}}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Atualiza CHAT Supabase",
+    "table": "leads_sync_2_0",
+    "params": {
+      "operation": "update",
+      "tableId": "leads_sync_2_0",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "phone",
+            "condition": "eq",
+            "keyValue": "={{ $('Dados1').item.json.Telefone }}"
+          }
+        ]
+      },
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "created_at",
+            "fieldValue": "={{ $now }}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Cria Histórico Supabase",
+    "table": "chat_messages",
+    "params": {
+      "tableId": "chat_messages",
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "phone",
+            "fieldValue": "={{ $('Dados1').item.json.Telefone }}"
+          },
+          {
+            "fieldId": "bot_message",
+            "fieldValue": "={{ $('Atendente').item.json.output }}"
+          },
+          {
+            "fieldId": "user_message",
+            "fieldValue": "={{ $('Dados1').item.json.message.content }}"
+          },
+          {
+            "fieldId": "message_type",
+            "fieldValue": "={{ $('Webhook1').item.json.body.type }}"
+          },
+          {
+            "fieldId": "created_at",
+            "fieldValue": "={{ $now }}"
+          },
+          {
+            "fieldId": "nomewpp",
+            "fieldValue": "={{ $('Dados1').item.json.NomeWpp }}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "ListMessages-Supabase2",
+    "table": "chat_messages",
+    "params": {
+      "operation": "getAll",
+      "tableId": "chat_messages",
+      "matchType": "allFilters",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "phone",
+            "condition": "eq",
+            "keyValue": "={{ $('Dados').item.json.Telefone }}"
+          },
+          {
+            "keyName": "active",
+            "condition": "eq",
+            "keyValue": "true"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Pausar IA",
+    "table": "leads_sync_2_0",
+    "params": {
+      "operation": "update",
+      "tableId": "leads_sync_2_0",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "telefone",
+            "condition": "eq",
+            "keyValue": "={{ $('Code').item.json.telefone }}"
+          }
+        ]
+      },
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "atendimento_ia",
+            "fieldValue": "pause"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Verificar Pause",
+    "table": "leads_sync_2_0",
+    "params": {
+      "operation": "get",
+      "tableId": "leads_sync_2_0",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "atendimento_ia",
+            "keyValue": "pause"
+          },
+          {
+            "keyName": "phone",
+            "keyValue": "={{ $json.Telefone }}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Reativar IA",
+    "table": "dados_cliente_duplicate",
+    "params": {
+      "operation": "update",
+      "tableId": "dados_cliente_duplicate",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "telefone",
+            "condition": "eq",
+            "keyValue": "={{ $('Dados').item.json.Telefone }}"
+          }
+        ]
+      },
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "atendimento_ia",
+            "fieldValue": "reativada"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Deleta linhas antigas do documento1",
+    "table": "documents",
+    "params": {
+      "operation": "delete",
+      "tableId": "documents",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "id",
+            "condition": "neq",
+            "keyValue": "0"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Pausar IA1",
+    "table": "dados_cliente_duplicate",
+    "params": {
+      "operation": "update",
+      "tableId": "dados_cliente_duplicate",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "telefone",
+            "condition": "eq",
+            "keyValue": "={{ $('Dados').item.json.Telefone }}"
+          }
+        ]
+      },
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "atendimento_ia",
+            "fieldValue": "pause"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Pausar IA2",
+    "table": "leads_sync_2_0",
+    "params": {
+      "operation": "update",
+      "tableId": "leads_sync_2_0",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "telefone",
+            "condition": "eq",
+            "keyValue": "={{ $json.telefoneOrigem }}"
+          }
+        ]
+      },
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "atendimento_ia",
+            "fieldValue": "pause"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Verificar Pause2",
+    "table": "Leads",
+    "params": {
+      "operation": "get",
+      "tableId": "Leads",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "telefone",
+            "keyValue": "={{ $('Code4').item.json.telefone }}"
+          },
+          {
+            "keyName": "atendimento_ia",
+            "keyValue": "pause"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Atualiza CHAT Supabase1",
+    "table": "leads_sync_2_0",
+    "params": {
+      "operation": "update",
+      "tableId": "leads_sync_2_0",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "phone",
+            "condition": "eq",
+            "keyValue": "={{ $('Dados1').item.json.Telefone }}"
+          }
+        ]
+      },
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "atendimento_ia",
+            "fieldValue": "=pause"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Buscar Perfil Supabase",
+    "table": "client_profiles",
+    "params": {
+      "operation": "get",
+      "tableId": "client_profiles",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "phone",
+            "keyValue": "={{ $json.body.sender }}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Update a row",
+    "table": "leads_sync_2_0",
+    "params": {
+      "operation": "update",
+      "tableId": "leads_sync_2_0",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "phone",
+            "condition": "eq",
+            "keyValue": "={{ $(\"Dados1\").first().json.Telefone }}"
+          }
+        ]
+      },
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "conversation_stage",
+            "fieldValue": "={{ $json.conversation_stage }}"
+          },
+          {
+            "fieldId": "score_confianca",
+            "fieldValue": "={{ $json.score_confianca }}"
+          },
+          {
+            "fieldId": "perfil_completo",
+            "fieldValue": "={{ $json.perfil_completo }}"
+          },
+          {
+            "fieldId": "qtd_quartos",
+            "fieldValue": "={{ $json.qtd_quartos }}"
+          },
+          {
+            "fieldId": "budget_max",
+            "fieldValue": "={{ $json.budget_max }}"
+          },
+          {
+            "fieldId": "interest",
+            "fieldValue": "={{ $json.interest }}"
+          },
+          {
+            "fieldId": "bairros_preferencia",
+            "fieldValue": "={{ $json.bairros_preferencia }}"
+          },
+          {
+            "fieldId": "tipo_imovel_p1",
+            "fieldValue": "={{ $json.p1_tipo_finalidade }}"
+          },
+          {
+            "fieldId": "p2_quartos_suites",
+            "fieldValue": "={{ $json.p2_quartos_suites }}"
+          },
+          {
+            "fieldId": "p3_tamanho_imovel",
+            "fieldValue": "={{ $json.p3_garagem_tamanho }}"
+          },
+          {
+            "fieldId": "p4_localizacao",
+            "fieldValue": "={{ $json.p4_localizacao }}"
+          },
+          {
+            "fieldId": "p5_faixa_valor",
+            "fieldValue": "={{ $json.p5_faixa_valor }}"
+          },
+          {
+            "fieldId": "p6_perfil_familiar",
+            "fieldValue": "={{ $json.p6_perfil_familiar }}"
+          },
+          {
+            "fieldId": "p7_necessidades_especiais",
+            "fieldValue": "={{ $json.p7_necessidades_especiais }}"
+          },
+          {
+            "fieldId": "p8_urgencia",
+            "fieldValue": "={{ $json.p8_urgencia }}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Busca Telefone1",
+    "table": "leads_sync_2_0",
+    "params": {
+      "operation": "get",
+      "tableId": "leads_sync_2_0",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "name",
+            "keyValue": "={{ $('Webhook1').item.json.body.name }}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Create a row1",
+    "table": "client_profiles",
+    "params": {
+      "tableId": "client_profiles",
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "phone",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.phone }}"
+          },
+          {
+            "fieldId": "name",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.name }}"
+          },
+          {
+            "fieldId": "current_stage",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.current_stage }}"
+          },
+          {
+            "fieldId": "total_messages",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.total_messages }}"
+          },
+          {
+            "fieldId": "last_interaction",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.last_interaction }}"
+          },
+          {
+            "fieldId": "status",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.status }}"
+          },
+          {
+            "fieldId": "updated_at",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.updated_at }}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Get a row2",
+    "table": "client_profiles",
+    "params": {
+      "operation": "get",
+      "tableId": "client_profiles",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "phone",
+            "keyValue": "={{ $('Webhook1').item.json.body.phone }}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Update a row1",
+    "table": "client_profiles",
+    "params": {
+      "operation": "update",
+      "tableId": "client_profiles",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "phone",
+            "condition": "eq",
+            "keyValue": "={{ $('Preparar Atualização Perfil1').item.json.phone }}"
+          }
+        ]
+      },
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "name",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.name }}"
+          },
+          {
+            "fieldId": "phone",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.phone }}"
+          },
+          {
+            "fieldId": "current_stage",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.current_stage }}"
+          },
+          {
+            "fieldId": "total_messages",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.total_messages }}"
+          },
+          {
+            "fieldId": "last_interaction",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.last_interaction }}"
+          },
+          {
+            "fieldId": "status",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.status }}"
+          },
+          {
+            "fieldId": "updated_at",
+            "fieldValue": "={{ $('Preparar Atualização Perfil1').item.json.updated_at }}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Get a historic",
+    "table": "chat_messages",
+    "params": {
+      "operation": "get",
+      "tableId": "chat_messages",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "phone",
+            "keyValue": "={{ $(\"Dados1\").first().json.Telefone }}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Create a row base da dados teste",
+    "table": "leads_sync_2_0",
+    "params": {
+      "tableId": "leads_sync_2_0",
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "name",
+            "fieldValue": "={{ $('Dados1').item.json.NomeWpp }}"
+          },
+          {
+            "fieldId": "phone",
+            "fieldValue": "={{ $('Rotas').item.json.Telefone }}"
+          },
+          {
+            "fieldId": "created_at",
+            "fieldValue": "={{ $now}}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Create a row base de dados production",
+    "table": "leads",
+    "params": {
+      "tableId": "leads",
+      "fieldsUi": {
+        "fieldValues": [
+          {
+            "fieldId": "name",
+            "fieldValue": "={{ $('Dados1').item.json.NomeWpp }}"
+          },
+          {
+            "fieldId": "phone",
+            "fieldValue": "={{ $('Rotas').item.json.Telefone }}"
+          },
+          {
+            "fieldId": "created_at",
+            "fieldValue": "={{ $now}}"
+          },
+          {
+            "fieldId": "stage",
+            "fieldValue": "Primeiro Atendimento"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "Get a row barden production",
+    "table": "leads",
+    "params": {
+      "operation": "get",
+      "tableId": "leads",
+      "filters": {
+        "conditions": [
+          {
+            "keyName": "phone",
+            "keyValue": "={{ $json.Telefone }}"
+          }
+        ]
+      }
+    }
+  }
+]
