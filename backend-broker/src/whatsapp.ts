@@ -5,12 +5,17 @@ import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
+import WebSocket from 'ws';
 
 dotenv.config();
 
 const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!; // Precisamos da chave de serviço para bypassar o RLS
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  global: {
+    WebSocket: WebSocket
+  }
+});
 
 // Guardar sessões ativas na memória
 const sessions = new Map<string, any>();
